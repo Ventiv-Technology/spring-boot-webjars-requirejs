@@ -1,0 +1,101 @@
+plugins {
+    id "com.github.hierynomus.license" version "0.11.0"
+}
+
+apply plugin: 'java'
+apply plugin: 'project-report'
+apply plugin: 'maven-publish'
+
+repositories {
+    jcenter()
+}
+
+sourceCompatibility = JavaVersion.VERSION_1_7
+targetCompatibility = JavaVersion.VERSION_1_7
+	
+group = 'org.ventiv'
+version = '1.0.0'
+
+dependencies {
+    // Spring Boot
+	compile "org.springframework.boot:spring-boot:1.1.6.RELEASE"
+	compile 'javax.servlet:javax.servlet-api:3.1.0'
+    compile 'org.webjars:webjars-locator:0.17'
+
+    testCompile 'junit:junit:4.11'
+
+    // Testing Web Jars
+    testRuntime 'org.webjars:angularjs:1.3.0-rc.0'
+    testRuntime 'org.webjars:ng-grid:2.0.12'
+    testRuntime 'org.webjars:jquery:2.1.1'
+    testRuntime 'org.webjars:requirejs:2.1.14-3'
+}
+
+task sourcesJar(type: Jar, dependsOn: classes) {
+    classifier = 'sources'
+    from sourceSets.main.allSource
+}
+
+task javadocJar(type: Jar, dependsOn: javadoc) {
+    classifier = 'javadoc'
+    from javadoc.destinationDir
+}
+
+artifacts {
+    archives sourcesJar
+    archives javadocJar
+}
+
+publishing {
+    publications {
+        mavenJava(MavenPublication) {
+            from components.java
+
+            artifact javadocJar {
+                classifier "javadoc"
+            }
+
+            artifact sourcesJar {
+                classifier "sources"
+            }
+
+            pom.withXml {
+                asNode().children().last() + {
+                    resolveStrategy = Closure.DELEGATE_FIRST
+                    name 'spring-boot-webjars-requirejs'
+                    description 'Spring Boot WebJars RequireJs Config Generator'
+                    licenses {
+                        license {
+                            name 'The Apache Software License, Version 2.0'
+                            url 'http://www.apache.org/license/LICENSE-2.0.txt'
+                            distribution 'repo'
+                        }
+                    }
+                }
+            }
+        }
+    }
+    repositories {
+        maven {
+            url "$buildDir/repo"
+            /*
+            url "https://api.bintray.com/maven/ventiv-technology/Maven/spring-boot-webjars-requirejs"
+            credentials {
+                username = bintrayUserName
+                password = bintrayPassword
+            }
+             */
+        }
+    }
+}
+
+task wrapper(type: Wrapper) {
+    gradleVersion = '2.1-rc-4'
+}
+
+license {
+    header rootProject.file('license/HEADER')
+    strictCheck true
+    ext.year = Calendar.getInstance().get(Calendar.YEAR)
+    ext.name = 'Ventiv Technology'
+}
