@@ -46,7 +46,7 @@ public class RequireJsConfigServlet implements Servlet {
         webJarRootUrl = env.getProperty("webjars.requirejs.config.rootUrl", String.class, webJarRootUrl);
         prettyPrint = env.getProperty("webjars.requirejs.config.prettyPrint", Boolean.class, prettyPrint);
 
-        requireJsConfigBuilder = new RequireJsConfigBuilder(webJarRootUrl);
+        requireJsConfigBuilder = new RequireJsConfigBuilder(webJarRootUrl, env);
     }
 
     /**
@@ -56,10 +56,12 @@ public class RequireJsConfigServlet implements Servlet {
 
     @Override
     public void init(ServletConfig config) throws ServletException {
-        webJarRootUrl = getWithDefault(config.getInitParameter("webjars.requirejs.config.rootUrl"), webJarRootUrl);
-        prettyPrint = getWithDefault(config.getInitParameter("webjars.requirejs.config.prettyPrint"), prettyPrint);
+        if (requireJsConfigBuilder == null) {       // Only initialize this if we haven't already (e.g. Not in Spring-Boot)
+            webJarRootUrl = getWithDefault(config.getInitParameter("webjars.requirejs.config.rootUrl"), webJarRootUrl);
+            prettyPrint = getWithDefault(config.getInitParameter("webjars.requirejs.config.prettyPrint"), prettyPrint);
 
-        requireJsConfigBuilder = new RequireJsConfigBuilder(webJarRootUrl);
+            requireJsConfigBuilder = new RequireJsConfigBuilder(webJarRootUrl, null);
+        }
     }
 
     @Override

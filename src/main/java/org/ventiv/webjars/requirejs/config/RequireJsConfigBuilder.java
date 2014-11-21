@@ -18,6 +18,7 @@ package org.ventiv.webjars.requirejs.config;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.springframework.core.env.Environment;
 import org.webjars.RequireJS;
 import org.webjars.WebJarAssetLocator;
 
@@ -36,13 +37,15 @@ public class RequireJsConfigBuilder {
     private final WebJarAssetLocator locator = new WebJarAssetLocator();
     private final ObjectMapper mapper = new ObjectMapper();
     private final String rootPath;
+    private final Environment env;
 
     public RequireJsConfigBuilder() {
-        this("/webjars/");
+        this("/webjars/", null);
     }
 
-    public RequireJsConfigBuilder(String rootPath) {
+    public RequireJsConfigBuilder(String rootPath, Environment env) {
         this.rootPath = rootPath;
+        this.env = env;
     }
 
     public Map<String, Object> buildConfig() {
@@ -80,6 +83,13 @@ public class RequireJsConfigBuilder {
     }
 
     private void buildPathForJar(String name, String version, Map<String, Object> requireJsConfig, Map<String, String> paths) {
+        if (env != null && env.containsProperty("webjars.requirejs.paths." + name)) {
+            log.debug("Found property webjars.requirejs.paths." + name + ".  Overriding URL.");
+
+            paths.put(name, rootPath + name + "/" + version + "/" + env.getProperty("webjars.requirejs.paths." + name));
+            return;
+        }
+
         if (requireJsConfig.containsKey("paths") && requireJsConfig.get("paths") instanceof Map) {
             Map<String, String> pathMap = (Map) requireJsConfig.get("paths");
 
