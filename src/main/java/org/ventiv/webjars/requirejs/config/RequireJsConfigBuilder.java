@@ -24,6 +24,7 @@ import org.webjars.WebJarAssetLocator;
 
 import java.io.IOException;
 import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
 
@@ -61,6 +62,14 @@ public class RequireJsConfigBuilder {
             if (webJarRequireJsConfig != null) {
                 buildPathForJar(webJar.getKey(), webJar.getValue(), webJarRequireJsConfig, paths);
                 buildOthersForJar(webJar.getKey(), webJar.getValue(), webJarRequireJsConfig, requireJsConfig);
+            }
+        }
+
+        // Add any paths that are in the environment that are not in our config already
+        if (env != null) {
+            List<String> newModules = env.getProperty("webjars.requirejs.newModules", List.class);
+            for (String module : newModules) {
+                paths.put(module, rootPath + env.getProperty("webjars.requirejs.paths." + module));
             }
         }
 

@@ -12,7 +12,7 @@ repositories {
 
 sourceCompatibility = JavaVersion.VERSION_1_7
 targetCompatibility = JavaVersion.VERSION_1_7
-	
+
 group = 'org.ventiv'
 version = '1.0.2'
 
@@ -29,6 +29,7 @@ dependencies {
     testRuntime 'org.webjars:ng-grid:2.0.12'
     testRuntime 'org.webjars:jquery:2.1.1'
     testRuntime 'org.webjars:requirejs:2.1.14-3'
+    testRuntime 'org.webjars:kendo-ui-core:2014.2.716'
 }
 
 task sourcesJar(type: Jar, dependsOn: classes) {
@@ -79,10 +80,10 @@ publishing {
         maven {
             //url "$buildDir/repo"
             url "https://api.bintray.com/maven/ventiv-technology/Maven/spring-boot-webjars-requirejs"
-            credentials {
-                username = bintrayUserName
-                password = bintrayPassword
-            }
+            //credentials {
+            //    username = bintrayUserName
+            //    password = bintrayPassword
+            //}
         }
     }
 }

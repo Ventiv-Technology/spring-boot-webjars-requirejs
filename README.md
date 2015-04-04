@@ -30,6 +30,13 @@ To configure the module, the following properties are available.  They may be se
 - `webjars.requirejs.config.prettyPrint`
 	- Description: Should the Configuration structure be pretty printed?
 	- Default: `true`
+- `webjars.requirejs.paths.<dependencyName>`
+	- Description: Add / Override the path that is defined in the webjar's POM requirejs section
+	- Default: None
+- `webjars.requirejs.newModules`
+	- Description: New RequireJS moduels that are to be added to the requirejs configuration.  The actual location should be `webjars.requirejs.paths.<dependencyName>`
+	  with it's fully qualified URL path as it should appear in the configuration.  Use a comma separated list to add multiple.
+	- Default: None
 
 Dependencies
 ------------
