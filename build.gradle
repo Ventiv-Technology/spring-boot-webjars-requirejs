@@ -14,7 +14,7 @@ sourceCompatibility = JavaVersion.VERSION_1_7
 targetCompatibility = JavaVersion.VERSION_1_7
 
 group = 'org.ventiv'
-version = '1.0.2'
+version = '1.1.0'
 
 dependencies {
     // Spring Boot
@@ -80,10 +80,10 @@ publishing {
         maven {
             //url "$buildDir/repo"
             url "https://api.bintray.com/maven/ventiv-technology/Maven/spring-boot-webjars-requirejs"
-            //credentials {
-            //    username = bintrayUserName
-            //    password = bintrayPassword
-            //}
+            credentials {
+                username = project.hasProperty("bintrayUserName") ? bintrayUserName : ""
+                password = project.hasProperty("bintrayPassword") ? bintrayPassword : ""
+            }
         }
     }
 }
