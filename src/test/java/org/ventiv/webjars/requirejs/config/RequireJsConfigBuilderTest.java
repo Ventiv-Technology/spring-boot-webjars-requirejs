@@ -73,4 +73,24 @@ public class RequireJsConfigBuilderTest {
         assertEquals(paths.get("kendo-colorpicker"), "/webjars/kendo-ui-core/2014.2.716/js/kendo.colorpicker.min");
     }
 
+    @Test
+    public void overrideShim() throws Exception {
+        Map<String, Object> properties = new HashMap<>();
+        properties.put("webjars.requirejs.newModules", "kendo-angular,kendo-colorpicker,kendo-ui-core");
+        properties.put("webjars.requirejs.dependencies.kendo-angular", "angular,kendo-ui-core");
+        properties.put("webjars.requirejs.dependencies.kendo-ui-core", "jquery");
+
+        StandardEnvironment env = new StandardEnvironment();
+        env.getPropertySources().addFirst(new MapPropertySource("props", properties));
+
+        RequireJsConfigBuilder builder = new RequireJsConfigBuilder("/webjars/", env);
+        Map<String, Object> requireJsConfig = builder.buildConfig();
+
+        Map<String, Object> shim = (Map<String, Object>) requireJsConfig.get("shim");
+        assertEquals(Arrays.asList("angular"), shim.get("angular-animate"));
+        assertEquals(Arrays.asList("angular", "kendo-ui-core"), shim.get("kendo-angular"));
+        assertEquals(Arrays.asList("jquery"), shim.get("kendo-ui-core"));
+        assertEquals(null, shim.get("kendo-colorpicker"));
+    }
+
 }

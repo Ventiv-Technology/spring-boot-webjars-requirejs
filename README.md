@@ -30,15 +30,18 @@ To configure the module, the following properties are available.  They may be se
 - `webjars.requirejs.config.prettyPrint`
 	- Description: Should the Configuration structure be pretty printed?
 	- Default: `true`
-- `webjars.requirejs.paths.<dependencyName>`
+- `webjars.requirejs.paths.<requireJsModule>`
 	- Description: Add / Override the path that is defined in the webjar's POM requirejs section
 	- Default: None
 - `webjars.requirejs.newModules`
-	- Description: New RequireJS moduels that are to be added to the requirejs configuration.  The actual location should be `webjars.requirejs.paths.<dependencyName>`
+	- Description: New RequireJS moduels that are to be added to the requirejs configuration.  The actual location should be `webjars.requirejs.paths.<requireJsModule>`
 	  with it's fully qualified URL path as it should appear in the configuration.  Use a comma separated list to add multiple.
 	- Default: None
+- `webjars.requirejs.dependencies.<requireJsModule>`
+	- Description: Add new dependencies to the `<requireJsModule>`.  If the existing module does NOT have a shim value, you MUST add it to `webj
+	- Default: None
 
-Dependencies
+Dependenciesars.requirejs.newModules`
 ------------
 
 The intention was to keep dependencies to a minimum, so just the following are required at runtime (as well as their transitive dependencies):

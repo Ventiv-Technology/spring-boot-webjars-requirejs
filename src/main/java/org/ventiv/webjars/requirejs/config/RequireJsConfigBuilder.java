@@ -23,6 +23,9 @@ import org.webjars.RequireJS;
 import org.webjars.WebJarAssetLocator;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -65,11 +68,30 @@ public class RequireJsConfigBuilder {
             }
         }
 
-        // Add any paths that are in the environment that are not in our config already
+        // Add to any dependencies
+        if (env != null) {
+            Map<String, Object> shim = (Map<String, Object>) requireJsConfig.get("shim");
+            for (Map.Entry<String, Object> shimEntry : shim.entrySet()) {
+                List newDependencies = env.getProperty("webjars.requirejs.dependencies." + shimEntry.getKey(), List.class);
+                if (newDependencies != null && !newDependencies.isEmpty()) {
+                    if (shimEntry.getValue() == null)
+                        shimEntry.setValue(new ArrayList<String>());
+
+                    if (shimEntry.getValue() instanceof Collection)
+                        ((Collection) shimEntry.getValue()).addAll(newDependencies);
+                }
+            }
+        }
+
+        // Add any paths / dependencies that are in the environment that are not in our config already
         if (env != null) {
             List<String> newModules = env.getProperty("webjars.requirejs.newModules", List.class);
             for (String module : newModules) {
                 paths.put(module, rootPath + env.getProperty("webjars.requirejs.paths." + module));
+
+                List<String> dependencies = env.getProperty("webjars.requirejs.dependencies." + module, List.class);
+                if (dependencies != null && !dependencies.isEmpty())
+                    ((Map<String, Object>) requireJsConfig.get("shim")).put(module, dependencies);
             }
         }
 
