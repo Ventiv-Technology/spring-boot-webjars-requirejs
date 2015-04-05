@@ -57,8 +57,8 @@ public class RequireJsConfigBuilderTest {
         Map<String, Object> properties = new HashMap<>();
         properties.put("webjars.requirejs.newModules", "kendo-angular,kendo-colorpicker");
         properties.put("webjars.requirejs.paths.kendo-ui-core", "js/kendo.core.min");
-        properties.put("webjars.requirejs.paths.kendo-angular", "kendo-ui-core/2014.2.716/js/kendo.angular.min");
-        properties.put("webjars.requirejs.paths.kendo-colorpicker", "kendo-ui-core/2014.2.716/js/kendo.colorpicker.min");
+        properties.put("webjars.requirejs.paths.kendo-angular", "/webjars/kendo-ui-core/2014.2.716/js/kendo.angular.min");
+        properties.put("webjars.requirejs.paths.kendo-colorpicker", "/webjars/kendo-ui-core/2014.2.716/js/kendo.colorpicker.min");
 
         StandardEnvironment env = new StandardEnvironment();
         env.getPropertySources().addFirst(new MapPropertySource("props", properties));

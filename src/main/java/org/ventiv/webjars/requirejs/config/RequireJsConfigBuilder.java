@@ -87,7 +87,7 @@ public class RequireJsConfigBuilder {
         if (env != null) {
             List<String> newModules = env.getProperty("webjars.requirejs.newModules", List.class);
             for (String module : newModules) {
-                paths.put(module, rootPath + env.getProperty("webjars.requirejs.paths." + module));
+                paths.put(module, env.getProperty("webjars.requirejs.paths." + module));
 
                 List<String> dependencies = env.getProperty("webjars.requirejs.dependencies." + module, List.class);
                 if (dependencies != null && !dependencies.isEmpty())
