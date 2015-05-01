@@ -86,12 +86,14 @@ public class RequireJsConfigBuilder {
         // Add any paths / dependencies that are in the environment that are not in our config already
         if (env != null) {
             List<String> newModules = env.getProperty("webjars.requirejs.newModules", List.class);
-            for (String module : newModules) {
-                paths.put(module, env.getProperty("webjars.requirejs.paths." + module));
+            if (newModules != null && !newModules.isEmpty()) {
+                for (String module : newModules) {
+                    paths.put(module, env.getProperty("webjars.requirejs.paths." + module));
 
-                List<String> dependencies = env.getProperty("webjars.requirejs.dependencies." + module, List.class);
-                if (dependencies != null && !dependencies.isEmpty())
-                    ((Map<String, Object>) requireJsConfig.get("shim")).put(module, dependencies);
+                    List<String> dependencies = env.getProperty("webjars.requirejs.dependencies." + module, List.class);
+                    if (dependencies != null && !dependencies.isEmpty())
+                        ((Map<String, Object>) requireJsConfig.get("shim")).put(module, dependencies);
+                }
             }
         }
 

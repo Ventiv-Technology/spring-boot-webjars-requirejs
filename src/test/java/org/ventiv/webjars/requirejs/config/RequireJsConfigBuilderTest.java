@@ -93,4 +93,17 @@ public class RequireJsConfigBuilderTest {
         assertEquals(null, shim.get("kendo-colorpicker"));
     }
 
+    @Test
+    public void noNewModulesFromEnvironment() throws Exception {
+        Map<String, Object> properties = new HashMap<>();
+
+        StandardEnvironment env = new StandardEnvironment();
+        env.getPropertySources().addFirst(new MapPropertySource("props", properties));
+
+        RequireJsConfigBuilder builder = new RequireJsConfigBuilder("/webjars/", env);
+        Map<String, Object> requireJsConfig = builder.buildConfig();
+
+        assertNotNull(requireJsConfig);
+    }
+
 }
